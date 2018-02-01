@@ -122,7 +122,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="inc\Matrix.hpp" />
-    <ClInclude Include="inc\TMP_Matrix.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\devTest.cpp" />

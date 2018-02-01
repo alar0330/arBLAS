@@ -18,7 +18,11 @@ int main( ) {
 
    Matrix<double> mx2(mx1);
 
-   mx2(3, 3) = 3;
+   mx2(0, 3) = 3;
+
+   std::cout << mx2;
+
+   mx2 = mx1;
 
    std::cout << mx2;
 
