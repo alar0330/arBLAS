@@ -44,8 +44,12 @@ namespace aarz {
       //   - other ctors?
 
       // OPETORS:
-      Matrix& operator=(const Matrix &mx);      
 
+      template<typename C>
+      explicit operator Matrix<C>( ) const;
+
+      Matrix& operator=(const Matrix &mx);      
+      
       // INDICES:
       T& operator()(const size_t r, const size_t c) { return _data[r * _size2 + c]; }
       const T& operator()(const size_t r, const size_t c) const { return _data[r * _size2 + c]; }
@@ -87,11 +91,22 @@ namespace aarz {
       _size1 { mx._size1 },
       _size2 { mx._size2 }
    {
-      _data.resize(_size1 * _size2);
-      std::copy(mx.begin( ), mx.end( ), std::begin(_data));
+      _data = mx._data;   // C++11 auto-resizes & copies for 'valarray'
    }
 
    // OPETORS:
+   template<class T>
+   template<class C> inline
+   Matrix<T>::operator Matrix<C>( ) const
+   {
+      Matrix<C> ret(_size1, _size2);
+
+      std::copy(this->begin( ), this->end( ), ret.begin( ));
+
+      return ret;
+   }
+
+
    template<class T> inline
    Matrix<T>& Matrix<T>::operator=(const Matrix<T> &mx)
    {
@@ -106,7 +121,6 @@ namespace aarz {
 
       return *this;
    }
-
 
    // EXCEPTIONS:
    class MatrixException : std::exception {
@@ -124,8 +138,8 @@ namespace aarz {
    //template<class T> Matrix;
 
    template<class T>
-   std::ostream& operator<<(std::ostream &os, const Matrix<T> &mx) {
-
+   std::ostream& operator<<(std::ostream &os, const Matrix<T> &mx) 
+   {
       for (size_t i = 0; i < mx._data.size( ); i++)
          os << ((i % mx._size2) ? " " : "\n ") << mx._data[i];
 
